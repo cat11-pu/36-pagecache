@@ -9,17 +9,20 @@ function emit(label, value) { __lines.push([String(label).replace(/ =$/, ""), va
 
 
 const spec = JSON.parse(fs.readFileSync(process.argv[2] || "sample/pages.json", "utf8"));
-const state = run(spec.ops, spec.capacity);
+const ops = typeof spec.crash_at === "number"
+  ? spec.ops.slice(0, spec.crash_at)
+  : spec.ops;
+const state = run(ops, spec.capacity);
 const written = flush(state.dirty, spec.flush_budget);
 const back = recover(written.remaining, spec.flushed_before || []);
 const out = render(spec);
 
-emit("驻留页 =", JSON.stringify(state.resident));
-emit("脏页 =", JSON.stringify(state.dirty));
-emit("本次回写的页 =", JSON.stringify(written.flushed));
-emit("淘汰的页 =", JSON.stringify(state.evicted));
-emit("恢复时重放的页 =", JSON.stringify(back.replayed));
-emit("恢复时丢掉的页 =", JSON.stringify(back.lost));
+emit("驻留页 =", state.resident);
+emit("脏页 =", state.dirty);
+emit("本次回写的页 =", written.flushed);
+emit("淘汰的页 =", state.evicted);
+emit("恢复时重放的页 =", back.replayed);
+emit("恢复时丢掉的页 =", back.lost);
 emit("引用计数下溢次数 =", state.underflow);
 emit("没有可淘汰页的错误码 =", spec.no_victim_code);
 
