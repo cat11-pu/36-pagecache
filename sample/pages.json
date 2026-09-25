@@ -1,0 +1,18 @@
+{
+  "no_victim_code": "E_NO_VICTIM",
+  "underflow_code": "E_REF_UNDERFLOW",
+  "capacity": 3,
+  "flush_budget": 1,
+  "crash_at": 6,
+  "flushed_before": ["p1"],
+  "ops": [
+    {"op": "read", "page": "p0"},
+    {"op": "pin", "page": "p0"},
+    {"op": "write", "page": "p1"},
+    {"op": "write", "page": "p2"},
+    {"op": "read", "page": "p3"},
+    {"op": "write", "page": "p4"},
+    {"op": "unpin", "page": "p0"},
+    {"op": "write", "page": "p0"}
+  ]
+}

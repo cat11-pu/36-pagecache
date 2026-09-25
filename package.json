@@ -1,0 +1,5 @@
+{
+  "name": "pagecache",
+  "private": true,
+  "type": "module"
+}
